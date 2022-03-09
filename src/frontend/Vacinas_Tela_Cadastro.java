@@ -10,6 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -83,6 +86,11 @@ public class Vacinas_Tela_Cadastro extends javax.swing.JFrame {
 
         campoValidade.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         campoValidade.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        campoValidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                campoValidadeActionPerformed(evt);
+            }
+        });
 
         campoLote.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         campoLote.addActionListener(new java.awt.event.ActionListener() {
@@ -200,7 +208,10 @@ public class Vacinas_Tela_Cadastro extends javax.swing.JFrame {
             
         } else if (this.campoValidade.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Informe a validade");
-        }else{
+        } else if(!isDataValida()){
+                
+        }
+        else{
             inserirCadastro();
             Vacinas vacinas = new Vacinas();
             vacinas.setVisible(true);
@@ -209,6 +220,10 @@ public class Vacinas_Tela_Cadastro extends javax.swing.JFrame {
                    
            }
     }//GEN-LAST:event_btnSalvar1ActionPerformed
+
+    private void campoValidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoValidadeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_campoValidadeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -247,6 +262,8 @@ public class Vacinas_Tela_Cadastro extends javax.swing.JFrame {
     }
     
     public void inserirCadastro() {
+        
+        
         try {
             // Conecta ao banco de dados
             Connection con = Conexao.conector();
@@ -282,6 +299,30 @@ public class Vacinas_Tela_Cadastro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Erro ao inserir registro!", "Erro", JOptionPane.ERROR_MESSAGE);
             System.out.println("Erro ao inserir registro: " + e);
         }
+    }
+    
+       public boolean dataHoraValida(String dataHora) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT);
+            LocalDate d = LocalDate.parse(dataHora, formatter);
+            System.out.println("Data/Hora valida: " + dataHora);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Data/Hora invalida: " + dataHora);
+            return false;
+        }
+    }
+        
+    public boolean isDataValida() {
+        boolean valido = false;
+        String dataHora = campoValidade.getText();
+        if (!dataHoraValida(dataHora)) {
+            JOptionPane.showMessageDialog(null, "Informe uma data e hora válida!");
+        } else {
+            valido = true;
+        }
+        return valido;
     }
     
     

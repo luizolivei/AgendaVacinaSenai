@@ -10,6 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -99,6 +102,11 @@ public class Vacinas extends javax.swing.JFrame {
 
         campoValidade.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         campoValidade.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        campoValidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                campoValidadeActionPerformed(evt);
+            }
+        });
 
         campoLote.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         campoLote.addActionListener(new java.awt.event.ActionListener() {
@@ -320,8 +328,10 @@ public class Vacinas extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         int confirma = JOptionPane.showConfirmDialog(this,"Deseja realmente alterar esses dados? ", "Confirma", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
         if(confirma==JOptionPane.YES_OPTION){
+            if(isDataValida()){
             atualizarVacina();
             carregarTabela();
+            }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -333,6 +343,10 @@ public class Vacinas extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void campoValidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoValidadeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_campoValidadeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -517,6 +531,30 @@ public class Vacinas extends javax.swing.JFrame {
             con.close();
         } catch (Exception e) {
         }
+    }
+     
+        public boolean dataHoraValida(String dataHora) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT);
+            LocalDate d = LocalDate.parse(dataHora, formatter);
+            System.out.println("Data/Hora valida: " + dataHora);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Data/Hora invalida: " + dataHora);
+            return false;
+        }
+    }
+        
+    public boolean isDataValida() {
+        boolean valido = false;
+        String dataHora = campoValidade.getText();
+        if (!dataHoraValida(dataHora)) {
+            JOptionPane.showMessageDialog(null, "Informe uma data e hora válida!");
+        } else {
+            valido = true;
+        }
+        return valido;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

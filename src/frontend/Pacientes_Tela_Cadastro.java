@@ -10,6 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -204,7 +207,10 @@ public class Pacientes_Tela_Cadastro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Informe o RG do paciente!");
         } else if (this.campoNomeMae.getText().isEmpty()){
             JOptionPane.showMessageDialog(null, "Informe o nome da mãe do paciente!");
-        }else {
+        } else if(!isDataValida()){
+            
+        }        
+        else {
             inserirCadastro();
             Pacientes pacientes = new Pacientes();
             pacientes.setVisible(true);
@@ -262,6 +268,7 @@ public class Pacientes_Tela_Cadastro extends javax.swing.JFrame {
     
     
     public void inserirCadastro() {
+        
         try {
             
             // Conecta ao banco de dados
@@ -297,6 +304,30 @@ public class Pacientes_Tela_Cadastro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Erro ao inserir registro!", "Erro", JOptionPane.ERROR_MESSAGE);
             System.out.println("Erro ao inserir registro: " + e);
         }
+    }
+    
+       public boolean dataHoraValida(String dataHora) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT);
+            LocalDate d = LocalDate.parse(dataHora, formatter);
+            System.out.println("Data/Hora valida: " + dataHora);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Data/Hora invalida: " + dataHora);
+            return false;
+        }
+    }
+        
+    public boolean isDataValida() {
+        boolean valido = false;
+        String dataHora = campoDataNasc.getText();
+        if (!dataHoraValida(dataHora)) {
+            JOptionPane.showMessageDialog(null, "Informe uma data e hora válida!");
+        } else {
+            valido = true;
+        }
+        return valido;
     }
     
     

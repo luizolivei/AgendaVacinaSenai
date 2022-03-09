@@ -335,9 +335,12 @@ public class Agenda extends javax.swing.JFrame {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         int confirma = JOptionPane.showConfirmDialog(this,"Deseja realmente alterar esses dados? ", "Confirma", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+      
         if(confirma==JOptionPane.YES_OPTION){
+            if(isCadastroValido()){
             atualizarAgenda();
             carregarTabela();
+            }
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 

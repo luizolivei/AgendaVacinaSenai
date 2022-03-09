@@ -10,6 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -496,7 +499,9 @@ public class Pacientes extends javax.swing.JFrame {
     }
     
      public void atualizarPaciente() {
+         if(isDataValida()){
         try {
+            
             // Conecta ao banco de dados
             Connection con = Conexao.conector();
             // Monta a consulta SQL e prepara para executar
@@ -533,6 +538,9 @@ public class Pacientes extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Erro ao atualizar registro!", "Erro", JOptionPane.ERROR_MESSAGE);
             System.out.println("Erro ao atualizar registro: " + e);
         }
+    }else{
+             JOptionPane.showMessageDialog(null, "Erro, não foi possível atualizar");
+         }
     }
      
      public void excluirPaciente() {
@@ -563,6 +571,30 @@ public class Pacientes extends javax.swing.JFrame {
             con.close();
         } catch (Exception e) {
         }
+    }
+     
+     public boolean dataHoraValida(String dataHora) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT);
+            LocalDate d = LocalDate.parse(dataHora, formatter);
+            System.out.println("Data/Hora valida: " + dataHora);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Data/Hora invalida: " + dataHora);
+            return false;
+        }
+    }
+        
+    public boolean isDataValida() {
+        boolean valido = false;
+        String dataHora = campoDataNasc.getText();
+        if (!dataHoraValida(dataHora)) {
+            JOptionPane.showMessageDialog(null, "Informe uma data e hora válida!");
+        } else {
+            valido = true;
+        }
+        return valido;
     }
 
 

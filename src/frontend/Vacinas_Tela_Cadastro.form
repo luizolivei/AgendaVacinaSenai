@@ -172,6 +172,9 @@
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="campoValidadeActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="try{&#xd;&#xa;    javax.swing.text.MaskFormatter dataVal = new javax.swing.text.MaskFormatter(&quot;##/##/####&quot;);&#xd;&#xa;    campoValidade = new javax.swing.JFormattedTextField(dataVal);&#xd;&#xa;} catch (Exception e) {&#xd;&#xa;}"/>
       </AuxValues>
